@@ -1,0 +1,99 @@
+npm:node package manager(node 的包管理工具)
+
+安装npm
+先安装node，（怎么确定安装完成：打开cmd——>npm -v 显示版本号即安装成功）
+
+npm使用
+初始化操作：npm init 会生成package.json文件
+下载所需要的包
+npm install jquery(回去registry.npmjs.org这个地址下载jquery) 会生成node_modules文件夹（jq放在里面）
+
+npm install jquery --save(会把jq的信息存储到package.json中添加下载的包的版本信息)  dependencies
+
+gulp：前端自动化构建工具
+gulp中有五个核心的方法
+-gulp.task('任务名',function(){})  //创建任务
+
+-gulp.src('./*.css') 指定想要处理的文件  *:表示所有的文件
+注意：gulp.src(['./js','./app.js'])  //文件多的情况
+
+-gulp.dest() //指定最终处理后的文件的存放路径
+
+-gulp.watch() //自动监视文件的变化，执行相应的任务。
+
+-gulp.run('任务名') //直接执行相应任务
+
+gulp安装(先全局安装)
+npm install gulp-cli -g(global)
+
+gulp的使用
+先创建项目projectGulp（index.html/app.js）——>初始化 npm init——>在当前项目中安装gulp  npm install gulp --save——>在当前项目中新建一个文件gulpfile.js(
+对项目中的一些东西进行处理)
+
+对js进行压缩操作
+npm install gulp-uglify --save
+
+对js，css进行合并操作
+npm install gulp-concat --save
+
+对css进行合并操作
+npm install gulp-cssnano --save
+
+对html进行合并操作
+npm install gulp-htmlmin --save
+
+压缩操作步骤：
+先引入下载下来的包 ：
+var uglify=require('gulp-uglify');
+var concat=require('gulp-concat');
+.....
+
+再在gulpfile.js里处理任务
+gulp.task('script',function(){
+    gulp.src('./app.js')      //匹配到当前目录下的app.js文件
+
+        .pipe(uglify())
+
+        .pipe(gulp.dest('./dist'))  //指定文件输出路径
+})  //对js的合并，压缩
+
+gulp.task('style',function(){
+    gulp.src(['./*.css']).pipe(concat('index.css')).pipe(cssnano()).pipe(gulp.dest('./dist'))
+})     //对css的合并和压缩
+
+gulp.task('html',function(){
+    gulp.src(['./index.html']).pipe(htmlmin({collapseWhitespace:true})).pipe(gulp.dest('./dist'))
+})     //对html的压缩
+
+htmlmin()里面可传多种参数，默认是不压缩  //可在npmjs官方文档里查看各参数的作用
+
+watch：自动监视文件变化，执行相应任务
+gulp.task('mywatch',function(){
+    //参数是任务名
+     gulp.run（'script'）
+
+//第一个参数：要监视的文件;第二个参数：要执行的任务
+    gulp.watch(['./app.js','index.js'],['script'])
+})
+运行：gulp watch     后面每次对应文件变化都会自动在命令行发生变化
+
+gulp watch：监视文件变化，然后执行相应的文件（文件必须变化才行）
+例：运行gulp watch后 文件变化才能监视到，如果刚进来就改变了 可以通过gulp.run
+  gulp.run ：直接执行指定的文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
